@@ -2,7 +2,7 @@
 library(readxl)
 
 # Leer los datos
-misDatos <- read_excel("D:/CARRERA-HUAMANJULCA/Calculos Excel/Validacion cuestionario.xlsx", sheet = "Kendall")
+misDatos <- read_excel("D:/Proyectos/Tesis_bi_microclin/Calculos Excel/Validacion cuestionario.xlsx", sheet = "Kendall")
 
 # Mostrar los datos
 print(misDatos)
