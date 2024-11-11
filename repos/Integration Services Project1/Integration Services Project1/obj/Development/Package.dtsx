@@ -1,0 +1,1069 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="10/17/2024 10:03:30 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="KEVV"
+  DTS:CreatorName="KEVV\kcarr"
+  DTS:DTSID="{A2852594-69E7-4832-B8B5-44B549D36C8C}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5685.0"
+  DTS:LocaleID="3082"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="14"
+  DTS:VersionGUID="{CCC75303-ECFB-4D95-92DB-94F4F6235034}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Incrementar Clientes"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Tarea Flujo de datos"
+      DTS:DTSID="{8987C6C1-80A4-4FD9-A59D-BF1E097BC9F8}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Incrementar Clientes"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Incrementar Clientes\División condicional"
+              componentClassID="Microsoft.ConditionalSplit"
+              contactInfo="División condicional;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;0"
+              description="Enruta filas de datos a diferentes salidas según el contenido de los datos. Se usan condiciones (expresiones de SSIS) para especificar las filas que se van a enrutar. Por ejemplo, se usa para separar los registros que deben limpiarse de los registros listos para ser cargados o para enrutar solamente un subconjunto de registros."
+              name="División condicional"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Incrementar Clientes\División condicional.Inputs[Entrada de división condicional]"
+                  description="Entrada en la transformación División condicional"
+                  name="Entrada de división condicional">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\División condicional.Inputs[Entrada de división condicional].Columns[IdCliente]"
+                      cachedDataType="i4"
+                      cachedName="IdCliente"
+                      lineageId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[IdCliente]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Incrementar Clientes\División condicional.Outputs[Nuevo_Registro]"
+                  description="Salida 2 de la transformación División condicional"
+                  errorOrTruncationOperation="Cálculo"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="Nuevo_Registro"
+                  synchronousInputId="Package\Incrementar Clientes\División condicional.Inputs[Entrada de división condicional]"
+                  truncationRowDisposition="FailComponent">
+                  <properties>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Especifica la expresión. Esta versión de expresión usa identificadores de linaje en lugar de nombres de columna."
+                      name="Expression">[ISNULL](#{Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[IdCliente]})</property>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Especifica la versión descriptiva de la expresión. Esta versión de expresión usa nombres de columna."
+                      expressionType="Notify"
+                      name="FriendlyExpression">ISNULL(IdCliente)</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Especifica la posición de la condición en la lista de condiciones que evalúa la transformación. El orden de evaluación es del menor al mayor valor."
+                      name="EvaluationOrder">0</property>
+                  </properties>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Incrementar Clientes\División condicional.Outputs[Salida predeterminada de división condicional]"
+                  description="Salida predeterminada de la transformación División condicional"
+                  exclusionGroup="1"
+                  name="Salida predeterminada de división condicional"
+                  synchronousInputId="Package\Incrementar Clientes\División condicional.Inputs[Entrada de división condicional]">
+                  <properties>
+                    <property
+                      dataType="System.Boolean"
+                      name="IsDefaultOut">true</property>
+                  </properties>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Incrementar Clientes\División condicional.Outputs[Salida de error de división condicional]"
+                  description="Salida de error de la transformación División condicional"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Salida de error de división condicional"
+                  synchronousInputId="Package\Incrementar Clientes\División condicional.Inputs[Entrada de división condicional]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\División condicional.Outputs[Salida de error de división condicional].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\División condicional.Outputs[Salida de error de división condicional].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\División condicional.Outputs[Salida de error de división condicional].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\División condicional.Outputs[Salida de error de división condicional].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Incrementar Clientes\Leer DimCliente"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="Consume datos de SQL Server, OLE DB, ODBC u Oracle mediante el correspondiente proveedor de datos de .NET Framework. Se usa una instrucción Transact-SQL para definir el conjunto de resultados. Por ejemplo, se extraen datos de SQL Server con el proveedor de datos de .NET Framework para SQL Server.;Microsoft Corporation; Microsoft SQL Server; © Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;4"
+              description="Consume datos de SQL Server, OLE DB, ODBC u Oracle mediante el correspondiente proveedor de datos de .NET Framework. Se usa una instrucción Transact-SQL para definir el conjunto de resultados. Por ejemplo, se extraen datos de SQL Server con el proveedor de datos de .NET Framework para SQL Server."
+              name="Leer DimCliente"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Especifica la instrucción SQL utilizada por el componente para extraer datos."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT    IdCliente
+FROM         dimCliente</property>
+                <property
+                  dataType="System.Int32"
+                  description="Número de segundos antes de que se agote el tiempo de espera de un comando. Un valor de 0 indica un tiempo de espera infinito."
+                  name="CommandTimeout">30</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica si se debe permitir que columnas externas que no sean de cadenas se conviertan implícitamente en cadenas en las columnas de salida."
+                  name="AllowImplicitStringConversion">true</property>
+                <property
+                  dataType="System.String"
+                  description="Nombre de la tabla de la base de datos de origen."
+                  expressionType="Notify"
+                  name="TableOrViewName"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">"dbo"."dimCliente"</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especificar el modo de recuperar información de columnas externas"
+                  name="AccessMode"
+                  typeConverter="Microsoft.SqlServer.Dts.Pipeline.DataReaderSourceAdapter+EnumToStringConverter">2</property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">Microsoft.DataReaderSourceAdapter</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Incrementar Clientes\Leer DimCliente.Connections[IDbConnection]"
+                  connectionManagerID="{935260A2-EC35-4A1E-BD12-13CE51C71733}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[KEVV_SQLExpress.MicroclinDIM]"
+                  description="Administrador de conexiones administrado"
+                  name="IDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de origen de ADO NET]"
+                  name="Salida de origen de ADO NET">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de origen de ADO NET].Columns[IdCliente]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de origen de ADO NET].ExternalColumns[IdCliente]"
+                      lineageId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de origen de ADO NET].Columns[IdCliente]"
+                      name="IdCliente"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de origen de ADO NET].ExternalColumns[IdCliente]"
+                      dataType="i4"
+                      name="IdCliente" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de error de origen de ADO NET]"
+                  isErrorOut="true"
+                  name="Salida de error de origen de ADO NET">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de error de origen de ADO NET].Columns[IdCliente]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de error de origen de ADO NET].Columns[IdCliente]"
+                      name="IdCliente" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de error de origen de ADO NET].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de error de origen de ADO NET].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de error de origen de ADO NET].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de error de origen de ADO NET].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Incrementar Clientes\Leer OrigenDestino DS"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="Consume datos de SQL Server, OLE DB, ODBC u Oracle mediante el correspondiente proveedor de datos de .NET Framework. Se usa una instrucción Transact-SQL para definir el conjunto de resultados. Por ejemplo, se extraen datos de SQL Server con el proveedor de datos de .NET Framework para SQL Server.;Microsoft Corporation; Microsoft SQL Server; © Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;4"
+              description="Consume datos de SQL Server, OLE DB, ODBC u Oracle mediante el correspondiente proveedor de datos de .NET Framework. Se usa una instrucción Transact-SQL para definir el conjunto de resultados. Por ejemplo, se extraen datos de SQL Server con el proveedor de datos de .NET Framework para SQL Server."
+              name="Leer OrigenDestino DS"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Especifica la instrucción SQL utilizada por el componente para extraer datos."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT    OrigenDestino_Id, sODNombre, sODRucDni, nProcliDepName, sODTelefono
+FROM         microclin.origendestino</property>
+                <property
+                  dataType="System.Int32"
+                  description="Número de segundos antes de que se agote el tiempo de espera de un comando. Un valor de 0 indica un tiempo de espera infinito."
+                  name="CommandTimeout">30</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica si se debe permitir que columnas externas que no sean de cadenas se conviertan implícitamente en cadenas en las columnas de salida."
+                  name="AllowImplicitStringConversion">true</property>
+                <property
+                  dataType="System.String"
+                  description="Nombre de la tabla de la base de datos de origen."
+                  expressionType="Notify"
+                  name="TableOrViewName"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">"microclin"."origendestino"</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especificar el modo de recuperar información de columnas externas"
+                  name="AccessMode"
+                  typeConverter="Microsoft.SqlServer.Dts.Pipeline.DataReaderSourceAdapter+EnumToStringConverter">2</property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">Microsoft.DataReaderSourceAdapter</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Connections[IDbConnection]"
+                  connectionManagerID="{71DC4D13-5D0B-4F73-8B42-3AE9A0A291D0}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[KEVV_SQLExpress.microclin]"
+                  description="Administrador de conexiones administrado"
+                  name="IDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET]"
+                  name="Salida de origen de ADO NET">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[OrigenDestino_Id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].ExternalColumns[OrigenDestino_Id]"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[OrigenDestino_Id]"
+                      name="OrigenDestino_Id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODNombre]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].ExternalColumns[sODNombre]"
+                      length="250"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODNombre]"
+                      name="sODNombre"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODRucDni]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].ExternalColumns[sODRucDni]"
+                      length="11"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODRucDni]"
+                      name="sODRucDni"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[nProcliDepName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].ExternalColumns[nProcliDepName]"
+                      length="200"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[nProcliDepName]"
+                      name="nProcliDepName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODTelefono]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].ExternalColumns[sODTelefono]"
+                      length="50"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODTelefono]"
+                      name="sODTelefono"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].ExternalColumns[OrigenDestino_Id]"
+                      dataType="i4"
+                      name="OrigenDestino_Id" />
+                    <externalMetadataColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].ExternalColumns[sODNombre]"
+                      dataType="wstr"
+                      length="250"
+                      name="sODNombre" />
+                    <externalMetadataColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].ExternalColumns[sODRucDni]"
+                      dataType="wstr"
+                      length="11"
+                      name="sODRucDni" />
+                    <externalMetadataColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].ExternalColumns[nProcliDepName]"
+                      dataType="wstr"
+                      length="200"
+                      name="nProcliDepName" />
+                    <externalMetadataColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].ExternalColumns[sODTelefono]"
+                      dataType="wstr"
+                      length="50"
+                      name="sODTelefono" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET]"
+                  isErrorOut="true"
+                  name="Salida de error de origen de ADO NET">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[OrigenDestino_Id]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[OrigenDestino_Id]"
+                      name="OrigenDestino_Id" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[sODNombre]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[sODNombre]"
+                      name="sODNombre" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[sODRucDni]"
+                      dataType="wstr"
+                      length="11"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[sODRucDni]"
+                      name="sODRucDni" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[nProcliDepName]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[nProcliDepName]"
+                      name="nProcliDepName" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[sODTelefono]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[sODTelefono]"
+                      name="sODTelefono" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de error de origen de ADO NET].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Incrementar Clientes\Merge_relational_to_Dim"
+              componentClassID="Microsoft.MergeJoin"
+              contactInfo="Combinación de mezcla;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;1"
+              description="Combina dos flujos de datos ordenados en uno solo mediante la combinación FULL, LEFT o INNER. Se recomienda esta transformación cuando se pueden ordenar los flujos de datos en sus orígenes."
+              name="Merge_relational_to_Dim"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica el tipo de combinación que se debe realizar."
+                  name="JoinType"
+                  typeConverter="JoinType">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica el número de columnas de la clave de ordenación."
+                  name="NumKeyColumns">1</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica si los valores NULL se tratan como valores iguales."
+                  name="TreatNullsAsEqual">true</property>
+                <property
+                  dataType="System.Int32"
+                  description="Indica la cantidad máxima solicitada de búferes por entrada antes del bloqueo."
+                  name="MaxBuffersPerInput">5</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla]"
+                  hasSideEffects="true"
+                  name="Entrada izquierda de combinación de mezcla">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla].Columns[OrigenDestino_Id]"
+                      cachedDataType="i4"
+                      cachedName="OrigenDestino_Id"
+                      cachedSortKeyPosition="1"
+                      lineageId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[OrigenDestino_Id]" />
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla].Columns[sODNombre]"
+                      cachedDataType="wstr"
+                      cachedLength="250"
+                      cachedName="sODNombre"
+                      lineageId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[sODNombre]" />
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla].Columns[sODRucDni]"
+                      cachedDataType="wstr"
+                      cachedLength="11"
+                      cachedName="sODRucDni"
+                      lineageId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[sODRucDni]" />
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla].Columns[nProcliDepName]"
+                      cachedDataType="wstr"
+                      cachedLength="200"
+                      cachedName="nProcliDepName"
+                      lineageId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[nProcliDepName]" />
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla].Columns[sODTelefono]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="sODTelefono"
+                      lineageId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[sODTelefono]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+                <input
+                  refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada derecha de combinación de mezcla]"
+                  hasSideEffects="true"
+                  name="Entrada derecha de combinación de mezcla">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada derecha de combinación de mezcla].Columns[IdCliente]"
+                      cachedDataType="i4"
+                      cachedName="IdCliente"
+                      cachedSortKeyPosition="1"
+                      lineageId="Package\Incrementar Clientes\Sort_DimCliente.Outputs[Salida de ordenación].Columns[IdCliente]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla]"
+                  isSorted="true"
+                  name="Salida de combinación de mezcla">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[OrigenDestino_Id]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[OrigenDestino_Id]"
+                      name="OrigenDestino_Id"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla].Columns[OrigenDestino_Id]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[sODNombre]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[sODNombre]"
+                      name="sODNombre">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla].Columns[sODNombre]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[sODRucDni]"
+                      dataType="wstr"
+                      length="11"
+                      lineageId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[sODRucDni]"
+                      name="sODRucDni">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla].Columns[sODRucDni]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[nProcliDepName]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[nProcliDepName]"
+                      name="nProcliDepName">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla].Columns[nProcliDepName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[sODTelefono]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[sODTelefono]"
+                      name="sODTelefono">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla].Columns[sODTelefono]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[IdCliente]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla].Columns[IdCliente]"
+                      name="IdCliente">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="La columna de entrada asociada a esta columna de salida"
+                          name="InputColumnID">#{Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada derecha de combinación de mezcla].Columns[IdCliente]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Incrementar Clientes\Sort_DimCliente"
+              componentClassID="Microsoft.Sort"
+              contactInfo="Ordenar;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;1"
+              description="Ordena los datos de entrada de manera ascendente o descendente cuando no es posible ordenarlos en su origen. Por ejemplo, se ordenan los datos de ventas por 'id. de cliente' antes de que se escriban en un archivo plano y se entreguen a otro departamento. Nota: no se recomienda realizar esta transformación para grandes flujos de datos."
+              name="Sort_DimCliente"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica si la transformación Ordenar quita filas con valores de ordenación duplicados."
+                  name="EliminateDuplicates">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica el número máximo de subprocesos que se deben usar para la ordenación."
+                  expressionType="Notify"
+                  name="MaximumThreads">-1</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Incrementar Clientes\Sort_DimCliente.Inputs[Entrada de ordenación]"
+                  name="Entrada de ordenación">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Sort_DimCliente.Inputs[Entrada de ordenación].Columns[IdCliente]"
+                      cachedDataType="i4"
+                      cachedName="IdCliente"
+                      lineageId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de origen de ADO NET].Columns[IdCliente]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">1</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Incrementar Clientes\Sort_DimCliente.Outputs[Salida de ordenación]"
+                  isSorted="true"
+                  name="Salida de ordenación">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Sort_DimCliente.Outputs[Salida de ordenación].Columns[IdCliente]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\Sort_DimCliente.Outputs[Salida de ordenación].Columns[IdCliente]"
+                      name="IdCliente"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de origen de ADO NET].Columns[IdCliente]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Incrementar Clientes\Sort_OrigenDestino"
+              componentClassID="Microsoft.Sort"
+              contactInfo="Ordenar;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;1"
+              description="Ordena los datos de entrada de manera ascendente o descendente cuando no es posible ordenarlos en su origen. Por ejemplo, se ordenan los datos de ventas por 'id. de cliente' antes de que se escriban en un archivo plano y se entreguen a otro departamento. Nota: no se recomienda realizar esta transformación para grandes flujos de datos."
+              name="Sort_OrigenDestino"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica si la transformación Ordenar quita filas con valores de ordenación duplicados."
+                  name="EliminateDuplicates">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica el número máximo de subprocesos que se deben usar para la ordenación."
+                  expressionType="Notify"
+                  name="MaximumThreads">-1</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Incrementar Clientes\Sort_OrigenDestino.Inputs[Entrada de ordenación]"
+                  name="Entrada de ordenación">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Sort_OrigenDestino.Inputs[Entrada de ordenación].Columns[OrigenDestino_Id]"
+                      cachedDataType="i4"
+                      cachedName="OrigenDestino_Id"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[OrigenDestino_Id]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">1</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Sort_OrigenDestino.Inputs[Entrada de ordenación].Columns[sODNombre]"
+                      cachedDataType="wstr"
+                      cachedLength="250"
+                      cachedName="sODNombre"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODNombre]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Sort_OrigenDestino.Inputs[Entrada de ordenación].Columns[sODRucDni]"
+                      cachedDataType="wstr"
+                      cachedLength="11"
+                      cachedName="sODRucDni"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODRucDni]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Sort_OrigenDestino.Inputs[Entrada de ordenación].Columns[nProcliDepName]"
+                      cachedDataType="wstr"
+                      cachedLength="200"
+                      cachedName="nProcliDepName"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[nProcliDepName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Incrementar Clientes\Sort_OrigenDestino.Inputs[Entrada de ordenación].Columns[sODTelefono]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="sODTelefono"
+                      lineageId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODTelefono]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica las opciones de comparación para datos de caracteres."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Especifica el criterio de ordenación de la columna."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación]"
+                  isSorted="true"
+                  name="Salida de ordenación">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[OrigenDestino_Id]"
+                      dataType="i4"
+                      lineageId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[OrigenDestino_Id]"
+                      name="OrigenDestino_Id"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[OrigenDestino_Id]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[sODNombre]"
+                      dataType="wstr"
+                      length="250"
+                      lineageId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[sODNombre]"
+                      name="sODNombre">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODNombre]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[sODRucDni]"
+                      dataType="wstr"
+                      length="11"
+                      lineageId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[sODRucDni]"
+                      name="sODRucDni">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODRucDni]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[nProcliDepName]"
+                      dataType="wstr"
+                      length="200"
+                      lineageId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[nProcliDepName]"
+                      name="nProcliDepName">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[nProcliDepName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[sODTelefono]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación].Columns[sODTelefono]"
+                      name="sODTelefono">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica el identificador de linaje de la columna de entrada que está asociada a esta columna de salida."
+                          name="SortColumnId">#{Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET].Columns[sODTelefono]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Incrementar Clientes.Paths[Salida de combinación de mezcla]"
+              endId="Package\Incrementar Clientes\División condicional.Inputs[Entrada de división condicional]"
+              name="Salida de combinación de mezcla"
+              startId="Package\Incrementar Clientes\Merge_relational_to_Dim.Outputs[Salida de combinación de mezcla]" />
+            <path
+              refId="Package\Incrementar Clientes.Paths[Salida de ordenación]"
+              endId="Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada izquierda de combinación de mezcla]"
+              name="Salida de ordenación"
+              startId="Package\Incrementar Clientes\Sort_OrigenDestino.Outputs[Salida de ordenación]" />
+            <path
+              refId="Package\Incrementar Clientes.Paths[Salida de ordenación1]"
+              endId="Package\Incrementar Clientes\Merge_relational_to_Dim.Inputs[Entrada derecha de combinación de mezcla]"
+              name="Salida de ordenación"
+              startId="Package\Incrementar Clientes\Sort_DimCliente.Outputs[Salida de ordenación]" />
+            <path
+              refId="Package\Incrementar Clientes.Paths[Salida de origen de ADO NET]"
+              endId="Package\Incrementar Clientes\Sort_OrigenDestino.Inputs[Entrada de ordenación]"
+              name="Salida de origen de ADO NET"
+              startId="Package\Incrementar Clientes\Leer OrigenDestino DS.Outputs[Salida de origen de ADO NET]" />
+            <path
+              refId="Package\Incrementar Clientes.Paths[Salida de origen de ADO NET1]"
+              endId="Package\Incrementar Clientes\Sort_DimCliente.Inputs[Entrada de ordenación]"
+              name="Salida de origen de ADO NET"
+              startId="Package\Incrementar Clientes\Leer DimCliente.Outputs[Salida de origen de ADO NET]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--Esta sección CDATA contiene la información de diseño del paquete. Esta sección incluye información como, por ejemplo, las coordenadas (x,y), el ancho y el alto.-->
+<!--Si edita manualmente esta sección y comete un error, puede eliminarlo. -->
+<!--El paquete podrá cargarse normalmente, pero se perderá la información de diseño anterior y el diseñador reorganizará los elementos automáticamente en la superficie de diseño.-->
+<Objects
+  Version="8">
+  <!--Cada uno de los nodos siguientes contiene propiedades que no afectan al comportamiento en tiempo de ejecución.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="176,41.6"
+          Id="Package\Incrementar Clientes"
+          TopLeft="211.428571878647,104.764705790523" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Incrementar Clientes">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="170.4,41.6"
+          Id="Package\Incrementar Clientes\Sort_OrigenDestino"
+          TopLeft="96.4285716338425,147.588235164751" />
+        <NodeLayout
+          Size="154.4,41.6"
+          Id="Package\Incrementar Clientes\Sort_DimCliente"
+          TopLeft="343.571429302802,149.882352809799" />
+        <NodeLayout
+          Size="196,41.6"
+          Id="Package\Incrementar Clientes\Merge_relational_to_Dim"
+          TopLeft="187.142857541235,259.235293890417" />
+        <NodeLayout
+          Size="170.4,41.6"
+          Id="Package\Incrementar Clientes\División condicional"
+          TopLeft="196.428571846716,344.117646757191" />
+        <NodeLayout
+          Size="152.8,41.6"
+          Id="Package\Incrementar Clientes\Leer DimCliente"
+          TopLeft="351.428572176671,49.7058823093721" />
+        <NodeLayout
+          Size="185.6,41.6"
+          Id="Package\Incrementar Clientes\Leer OrigenDestino DS"
+          TopLeft="95.00000020223,44.3529411375935" />
+        <EdgeLayout
+          Id="Package\Incrementar Clientes.Paths[Salida de origen de ADO NET1]"
+          TopLeft="424.300000739736,91.3058823093721">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,58.5764705004267"
+              Start="0,0"
+              End="0,51.0764705004267">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,51.0764705004267" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Incrementar Clientes.Paths[Salida de origen de ADO NET]"
+          TopLeft="184.714285918036,85.9529411375935">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,61.6352940271573"
+              Start="0,0"
+              End="0,54.1352940271573">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,54.1352940271573" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Incrementar Clientes.Paths[Salida de ordenación1]"
+          TopLeft="420.771429302802,191.482352809799">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-104.295238428234,67.7529410806182"
+              Start="0,0"
+              End="-104.295238428234,60.2529410806182">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.3226005621493" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,36.3226005621493"
+                    Point2="0,40.3226005621493"
+                    Point3="-4,40.3226005621493" />
+                  <mssgle:LineSegment
+                    End="-100.295238428234,40.3226005621493" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-100.295238428234,40.3226005621493"
+                    Point2="-104.295238428234,40.3226005621493"
+                    Point3="-104.295238428234,44.3226005621493" />
+                  <mssgle:LineSegment
+                    End="-104.295238428234,60.2529410806182" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Incrementar Clientes.Paths[Salida de ordenación]"
+          TopLeft="181.628571633843,189.188235164751">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="72.1809525740591,70.047058725666"
+              Start="0,0"
+              End="72.1809525740591,62.547058725666">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,37.6879256383518" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,37.6879256383518"
+                    Point2="0,41.6879256383518"
+                    Point3="4,41.6879256383518" />
+                  <mssgle:LineSegment
+                    End="68.1809525740591,41.6879256383518" />
+                  <mssgle:CubicBezierSegment
+                    Point1="68.1809525740591,41.6879256383518"
+                    Point2="72.1809525740591,41.6879256383518"
+                    Point3="72.1809525740591,45.6879256383518" />
+                  <mssgle:LineSegment
+                    End="72.1809525740591,62.547058725666" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Incrementar Clientes.Paths[Salida de combinación de mezcla]"
+          TopLeft="283.385714693976,300.835293890417">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,43.282352866774"
+              Start="0,0"
+              End="0,35.782352866774">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,35.782352866774" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Incrementar Clientes\Leer DimCliente">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Incrementar Clientes\Leer OrigenDestino DS">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
