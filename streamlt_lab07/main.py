@@ -48,7 +48,7 @@ except Exception as e:
 if df is not None and not df.empty:
     # Configuración de Streamlit
     st.title('Pronóstico de Enfermedades')
-    st.image("logo_microclin.png", use_column_width=True)
+    st.image("https://cdn.discordapp.com/attachments/1261175398385848332/1305416523879284736/logo_microclin.png?ex=6732f360&is=6731a1e0&hm=c220a51794fb167fb9873fde765cf7101db0acc6567d5bb41ec01e6a77cb30ca&", use_column_width=True)
     st.write("Esta aplicación utiliza ARIMA para predecir los casos de enfermedades basados en los datos proporcionados.")
     
     # Convertir la columna de fechas a tipo datetime
