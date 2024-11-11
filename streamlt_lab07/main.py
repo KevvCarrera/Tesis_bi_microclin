@@ -6,11 +6,8 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 import matplotlib.pyplot as plt
 import sqlalchemy
 
-# Configurar la conexión a la base de datos
-# Reemplaza 'user', 'password', 'host', 'database' con los datos de tu conexión
-engine = sqlalchemy.create_engine('mysql+pymysql://firetens_firetens:3Nwb+B^QSh1c@50.116.27.100/firetens_microclin')
+engine = sqlalchemy.create_engine('mysql+pymysql://firetens_firetens:3Nwb+B^QSh1c@50.116.27.100:3306/firetens_microclin')
 
-# Definir la consulta SQL
 query = """
 SELECT 
     idEnfermedad,
