@@ -8,7 +8,7 @@ import sqlalchemy
 
 # Configurar la conexión a la base de datos
 # Reemplaza 'user', 'password', 'host', 'database' con los datos de tu conexión
-engine = sqlalchemy.create_engine('mysql+pymysql://root:kev12345@localhost/microclin')
+engine = sqlalchemy.create_engine('mysql+pymysql://firetens_firetens:3Nwb+B^QSh1c@50.116.27.100/firetens_microclin')
 
 # Definir la consulta SQL
 query = """
@@ -34,7 +34,7 @@ SELECT
         ELSE NULL
     END AS dxLab
 FROM 
-    microclin.enfermedad
+    firetens_microclin.enfermedad
 WHERE 
     localizacion LIKE '%%,%%,%%';
 """
