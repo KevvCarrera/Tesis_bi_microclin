@@ -2,12 +2,57 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
+from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 import sqlalchemy
+from dotenv import load_dotenv
+import os
 
-engine = sqlalchemy.create_engine('mysql+pymysql://firetens_firetens:3Nwb+B^QSh1c@50.116.27.100:3306/firetens_microclin')
+# Cargar las variables de entorno
+load_dotenv()
 
+
+# Obtener las credenciales desde las variables de entorno
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
+
+# Función para ajustar el tamaño de datos reales y predicciones
+def ajustar_tamano(y_true, y_pred):
+    """
+    Ajusta las longitudes de los datos reales (y_true) y predicciones (y_pred)
+    para que coincidan antes de calcular métricas.
+    """
+    n = min(len(y_true), len(y_pred))  # Longitud mínima entre datos reales y predicciones
+    return y_true[-n:], y_pred[:n]  # Recorta ambas listas a la longitud mínima
+
+
+# Título e introducción
+st.markdown(
+    """
+    <div style="display: flex; align-items: center; justify-content: center;">
+        <h1>Pronóstico de Enfermedades</h1>
+        <img src="https://media.discordapp.net/attachments/1261175398385848332/1305416523879284736/logo_microclin.png?ex=6744bfa0&is=67436e20&hm=61374c8ae83a306698b50a5b49350b6da6bb5ad7f90e797f1f4427889dc8e89d&=&format=webp&quality=lossless" 
+        alt="Logo Microclin" width="115">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+st.write(
+    "Esta aplicación utiliza modelos de predicción como ARIMA, Holt-Winters y Redes Neuronales para analizar y pronosticar casos de enfermedades en animales con base en los datos proporcionados."
+)
+
+# Configuración de la conexión a la base de datos
+engine = sqlalchemy.create_engine(
+    f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+)
+
+# Consulta SQL para obtener los datos
 query = """
 SELECT 
     idEnfermedad,
@@ -31,7 +76,7 @@ SELECT
         ELSE NULL
     END AS dxLab
 FROM 
-    firetens_microclin.enfermedad
+    enfermedad
 WHERE 
     localizacion LIKE '%%,%%,%%';
 """
@@ -42,107 +87,139 @@ try:
     st.success("Datos cargados exitosamente.")
 except Exception as e:
     st.error(f"Error al cargar los datos: {e}")
-    df = None  # Asegurarse de que df esté definido
+    df = None
 
-# Verificar si df contiene datos antes de continuar
-if df is not None and not df.empty:
-    # Configuración de Streamlit
-    st.title('Pronóstico de Enfermedades')
-    st.image("https://cdn.discordapp.com/attachments/1261175398385848332/1305416523879284736/logo_microclin.png?ex=6732f360&is=6731a1e0&hm=c220a51794fb167fb9873fde765cf7101db0acc6567d5bb41ec01e6a77cb30ca&", use_column_width=True)
-    st.write("Esta aplicación utiliza ARIMA para predecir los casos de enfermedades basados en los datos proporcionados.")
+if df is not None:
+    # Preprocesamiento de datos
+    df['fecha'] = pd.to_datetime(df['fecha'])
+    df = df.sort_values('fecha')
+    df['nAnimalesMuertos'] = df['nAnimalesMuertos'].fillna(0)
     
-    # Convertir la columna de fechas a tipo datetime
-    df['fecha'] = pd.to_datetime(df['fecha'], format='%d/%m/%Y')
-    
-    # Añadir filtros de fecha y especie
-    st.sidebar.header("Filtros")
-    fecha_min = st.sidebar.date_input("Fecha mínima", df['fecha'].min().date())
-    fecha_max = st.sidebar.date_input("Fecha máxima", df['fecha'].max().date())
-    especie_seleccionada = st.sidebar.multiselect("Seleccionar especie", options=df['Especie'].unique(), default=df['Especie'].unique())
+    # Configuración de sidebar
+    with st.sidebar:
+        especies = df['Especie'].unique()
+        especie_seleccionada = st.selectbox("Seleccione una especie", especies)
 
-    # Aplicar los filtros
-    df_filtrado = df[(df['fecha'] >= pd.Timestamp(fecha_min)) & (df['fecha'] <= pd.Timestamp(fecha_max))]
-    df_filtrado = df_filtrado[df_filtrado['Especie'].isin(especie_seleccionada)]
-    
-    # Verificar si el filtro dejó datos
+        # Filtros de fecha separados
+        fecha_min = st.date_input("Seleccione la fecha mínima", df['fecha'].min())
+        fecha_max = st.date_input("Seleccione la fecha máxima", df['fecha'].max())
+
+        # Filtro por departamento
+        departamentos = ['Todos'] + list(df['Departamento'].unique())
+        departamento_seleccionado = st.selectbox("Seleccione un departamento (solo para predicción)", departamentos)
+
+    # Filtrar datos por especie y rango de fechas
+    df_filtrado = df[(df['Especie'] == especie_seleccionada) & 
+                     (df['fecha'] >= pd.to_datetime(fecha_min)) & 
+                     (df['fecha'] <= pd.to_datetime(fecha_max))]
+
+    # Filtrar por departamento si no se selecciona "Todos"
+    if departamento_seleccionado != 'Todos':
+        df_filtrado = df_filtrado[df_filtrado['Departamento'] == departamento_seleccionado]
+
     if not df_filtrado.empty:
-        st.subheader("Resumen de Especies")
-        especies_resumen = df_filtrado['Especie'].value_counts()
-        st.write("Distribución de casos por tipo de especie:")
-        st.bar_chart(especies_resumen)
+        # Agregación de datos por fecha
+        serie = df_filtrado.groupby('fecha')['nAnimalesMuertos'].sum()
+
+        # Crear un DataFrame para predicciones futuras
+        dias_prediccion = 30
+        fechas_futuras = pd.date_range(serie.index[-1] + pd.Timedelta(days=1), periods=dias_prediccion)
         
-        # Detalles de especies únicas en el DataFrame filtrado
-        st.write("Tipos de especies presentes en los datos filtrados:")
-        st.dataframe(df_filtrado[['Especie']].drop_duplicates().reset_index(drop=True))
+        # Modelos
+        st.write(f"### Predicción de mortalidad de animales para la especie {especie_seleccionada}")
+
+        # ARIMA
+        try:
+            model_arima = ARIMA(serie, order=(5, 1, 0))
+            arima_fit = model_arima.fit()
+            arima_pred = arima_fit.forecast(steps=dias_prediccion)
+        except Exception as e:
+            st.warning(f"Error al ajustar ARIMA: {e}")
+            arima_pred = [np.nan] * dias_prediccion
+
+        # Holt-Winters
+        if len(serie) >= 24:  # Verificar si hay al menos dos ciclos completos
+            try:
+                hw_model = ExponentialSmoothing(serie, seasonal='add', seasonal_periods=12).fit()
+                hw_pred = hw_model.forecast(dias_prediccion)
+            except Exception as e:
+                st.warning(f"Error al ajustar Holt-Winters: {e}")
+                hw_pred = [np.nan] * dias_prediccion
+        else:
+            st.warning("No hay suficientes datos para ajustar un modelo Holt-Winters con estacionalidad.")
+            hw_pred = [np.nan] * dias_prediccion
+
+        # Redes neuronales
+        try:
+            x = np.arange(len(serie)).reshape(-1, 1)
+            y = serie.values
+            mlp = MLPRegressor(hidden_layer_sizes=(50, 50), max_iter=500, random_state=42)
+            mlp.fit(x, y)
+            x_pred = np.arange(len(serie), len(serie) + dias_prediccion).reshape(-1, 1)
+            nn_pred = mlp.predict(x_pred)
+        except Exception as e:
+            st.warning(f"Error al ajustar Redes Neuronales: {e}")
+            nn_pred = [np.nan] * dias_prediccion
         
-        # Preparar los datos para la serie temporal
-        df_filtrado = df_filtrado.set_index('fecha')
-        df_filtrado.sort_index(inplace=True)
+        # Graficar los resultados con Plotly (interactivo)
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=serie.index, y=serie, mode='lines', name='Datos reales'))
+        fig.add_trace(go.Scatter(x=fechas_futuras, y=arima_pred, mode='lines+markers', name='ARIMA', line=dict(dash='dot')))
+        fig.add_trace(go.Scatter(x=fechas_futuras, y=hw_pred, mode='lines+markers', name='Holt-Winters', line=dict(dash='dot')))
+        fig.add_trace(go.Scatter(x=fechas_futuras, y=nn_pred, mode='lines+markers', name='Redes Neuronales', line=dict(dash='dot')))
+        fig.update_layout(title=f"Predicción de mortalidad de animales - {especie_seleccionada}",
+                          xaxis_title="Fecha",
+                          yaxis_title="Número de muertes",
+                          width=1200, height=600)
+        st.plotly_chart(fig)
+
+        # Gráfico de evolución por departamento
+        st.write("### Evolución por departamento")
+        departamentos = df_filtrado['Departamento'].unique()
+        departamentos_seleccionados = st.multiselect("Seleccione departamentos", departamentos, default=departamentos)
         
-        # Seleccionar la columna a predecir, por ejemplo, 'nCasos'
-        serie = df_filtrado['nCasos'].dropna()
-        
-        # Visualizar los datos
-        st.line_chart(serie)
-        
-        # Entrenar el modelo ARIMA
-        p, d, q = 5, 1, 0  # Ajusta estos parámetros según tu análisis
-        model = ARIMA(serie, order=(p, d, q))
-        model_fit = model.fit()
-        
-        # Predecir y mostrar resultados
-        predicciones = model_fit.forecast(steps=30)  # Predicción de 30 días
-        
-        # Explicación del método de predicción
-        st.subheader("Método de Predicción Utilizado")
-        st.write("""
-        El modelo utilizado para la predicción es un modelo ARIMA (AutoRegressive Integrated Moving Average), 
-        que es un método estadístico para analizar y predecir series temporales. Este método utiliza dependencias 
-        entre datos pasados para estimar futuros valores.
-        """)
-        
-        # Visualización de predicciones
-        st.subheader("Predicciones para los próximos 30 días")
-        st.write("Este gráfico muestra la proyección de los casos de enfermedades para los próximos 30 días.")
-        plt.figure(figsize=(10, 5))
-        plt.plot(serie.index, serie, label='Datos Reales')
-        plt.plot(pd.date_range(serie.index[-1], periods=31, freq='D')[1:], predicciones, label='Predicciones', color='orange')
-        plt.xlabel("Fecha")
-        plt.ylabel("Número de Casos")
-        plt.title("Predicciones ARIMA de Casos de Enfermedades")
-        plt.legend()
-        st.pyplot(plt)
-        
-        # Evaluar el modelo con KPIs
-        train_size = int(len(serie) * 0.8)
-        train, test = serie[:train_size], serie[train_size:]
-        
-        model = ARIMA(train, order=(p, d, q))
-        model_fit = model.fit()
-        predicciones_test = model_fit.forecast(steps=len(test))
-        
-        # Calcular KPIs
-        mse = mean_squared_error(test, predicciones_test)
-        mae = mean_absolute_error(test, predicciones_test)
-        rmse = np.sqrt(mse)
-        
-        # Mostrar los KPIs
-        st.subheader("KPIs del Modelo")
-        st.write(f"Mean Absolute Error (MAE): {mae:.2f}")
-        st.write(f"Mean Squared Error (MSE): {mse:.2f}")
-        st.write(f"Root Mean Squared Error (RMSE): {rmse:.2f}")
-        
-        # Mostrar gráfico de comparación
-        st.subheader("Comparación de Datos Reales vs Predicciones en el Período de Prueba")
-        plt.figure(figsize=(10, 5))
-        plt.plot(test.index, test, label='Datos Reales')
-        plt.plot(test.index, predicciones_test, color='red', label='Predicciones')
-        plt.xlabel("Fecha")
-        plt.ylabel("Número de Casos")
-        plt.title("Comparación de Datos Reales y Predicciones")
-        plt.legend()
-        st.pyplot(plt)
+        if departamentos_seleccionados:
+            evolucion_departamentos = df_filtrado[df_filtrado['Departamento'].isin(departamentos_seleccionados)]
+            evolucion_departamentos = evolucion_departamentos.groupby(['Departamento', 'fecha'])['nCasos'].sum().unstack(0).fillna(0)
+
+            fig2 = go.Figure()
+            for departamento in departamentos_seleccionados:
+                fig2.add_trace(go.Scatter(x=evolucion_departamentos.index,
+                                          y=evolucion_departamentos[departamento],
+                                          mode='lines', name=departamento))
+            fig2.update_layout(title=f"Evolución de casos por departamento - {especie_seleccionada}",
+                               xaxis_title="Fecha",
+                               yaxis_title="Número de casos",
+                               width=1200, height=600)
+            st.plotly_chart(fig2)
+        else:
+            st.warning("No se seleccionaron departamentos para mostrar.")
     else:
-        st.warning("No hay datos disponibles con los filtros seleccionados.")
-else:
-    st.warning("No hay datos disponibles para mostrar o la carga falló.")
+        st.warning("No hay datos para la especie seleccionada o el rango de fechas especificado.")
+
+    # Comparación de modelos
+    st.write("### Comparación de modelos")
+        
+    # Ajustar tamaños antes de calcular métricas
+    serie_arima, arima_pred = ajustar_tamano(serie, arima_pred)
+    serie_hw, hw_pred = ajustar_tamano(serie, hw_pred)
+    serie_nn, nn_pred = ajustar_tamano(serie, nn_pred)
+        
+    resultados = {
+        "Modelo": ["ARIMA", "Holt-Winters", "Redes Neuronales"],
+        "MAE": [
+            mean_absolute_error(serie_arima, arima_pred) if not np.isnan(arima_pred).all() else np.nan,
+            mean_absolute_error(serie_hw, hw_pred) if not np.isnan(hw_pred).all() else np.nan,
+            mean_absolute_error(serie_nn, nn_pred) if not np.isnan(nn_pred).all() else np.nan
+        ],
+        "RMSE": [
+            mean_squared_error(serie_arima, arima_pred, squared=False) if not np.isnan(arima_pred).all() else np.nan,
+            mean_squared_error(serie_hw, hw_pred, squared=False) if not np.isnan(hw_pred).all() else np.nan,
+            mean_squared_error(serie_nn, nn_pred, squared=False) if not np.isnan(nn_pred).all() else np.nan
+        ]
+    }
+
+    resultados_df = pd.DataFrame(resultados)
+    st.dataframe(resultados_df)
+        
+    st.write("El modelo más óptimo es aquel con menor RMSE.")
