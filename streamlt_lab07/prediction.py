@@ -7,8 +7,19 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import plotly.graph_objects as go
 import sqlalchemy
-import pymysql
+from dotenv import load_dotenv
+import os
 
+# Cargar las variables de entorno
+load_dotenv()
+
+
+# Obtener las credenciales desde las variables de entorno
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
 
 # Función para ajustar el tamaño de datos reales y predicciones
 def ajustar_tamano(y_true, y_pred):
@@ -37,7 +48,9 @@ st.write(
 )
 
 # Configuración de la conexión a la base de datos
-engine = sqlalchemy.create_engine('mysql+pymysql://firetens_firetens:3Nwb+B^QSh1c@50.116.27.100:3306/firetens_microclin')
+engine = sqlalchemy.create_engine(
+    f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+)
 
 # Consulta SQL para obtener los datos
 query = """

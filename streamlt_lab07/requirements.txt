@@ -3,6 +3,7 @@ pandas
 numpy
 statsmodels
 scikit-learn
-matplotlib
-SQLAlchemy
+plotly
+sqlalchemy
+python-dotenv
 pymysql
