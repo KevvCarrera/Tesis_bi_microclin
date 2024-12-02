@@ -47,6 +47,15 @@ st.write(
     "Esta aplicación utiliza modelos de predicción como ARIMA, Holt-Winters y Redes Neuronales para analizar y pronosticar casos de enfermedades en animales con base en los datos proporcionados."
 )
 
+# Agregar el botón para acceder al manual de ayuda
+if st.button('Ayuda en línea'):	
+    # Redirigir a una nueva pestaña con el enlace
+    st.markdown(
+        '<a href="https://alexair21.github.io/MicroclinAyuda/" target="_blank">Presiona aquí, para abir la ayuda en línea</a>',
+        unsafe_allow_html=True
+    )
+
+    
 # Configuración de la conexión a la base de datos
 engine = sqlalchemy.create_engine(
     f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
@@ -223,3 +232,4 @@ if df is not None:
     st.dataframe(resultados_df)
         
     st.write("El modelo más óptimo es aquel con menor RMSE.")
+
