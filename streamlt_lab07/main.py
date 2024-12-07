@@ -36,8 +36,6 @@ st.markdown(
     """
     <div style="display: flex; align-items: center; justify-content: center;">
         <h1>Pronóstico de Enfermedades</h1>
-        <img src="https://media.discordapp.net/attachments/1261175398385848332/1305416523879284736/logo_microclin.png?ex=6744bfa0&is=67436e20&hm=61374c8ae83a306698b50a5b49350b6da6bb5ad7f90e797f1f4427889dc8e89d&=&format=webp&quality=lossless" 
-        alt="Logo Microclin" width="115">
     </div>
     """,
     unsafe_allow_html=True
