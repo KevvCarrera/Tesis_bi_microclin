@@ -1,6 +1,6 @@
 -- ============ TESIS CARRERA_HUAMANJULCA  ==============
 
-use prueba01;
+use microclin;
 SET FOREIGN_KEY_CHECKS=0;
 -- TABLAS ELIMINADAS (Con datos poco importantes)
 
